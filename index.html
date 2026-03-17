@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة مستر شريف سالم | خبير الأحياء</title>
+    
+    <meta name="theme-color" content="#05080f">
+    <link rel="apple-touch-icon" href="12345.jpg">
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ 
+    <style>
+        :root {
+            --primary: #FFD700; /* ذهبي أساسي */
+            --accent: #D50000;  /* أحمر داكن للتميز */
+            --bg: #020202;      /* أسود ملكي */
+            --card-bg: rgba(20, 20, 20, 0.8); 
+            --text: #ffffff;
+            --nav-bg: rgba(0, 0, 0, 0.95); 
+            --glass: rgba(255, 215, 0, 0.05); /* زجاج بلمسة ذهبية خفيفة */
+            --gold: #FFD700;
+        }
+
+        [data-theme="light"] {
+            --bg: #eef2f7; --text: #0f172a; --nav-bg: rgba(255, 255, 255, 0.9);
+            --primary: #00bfa5; --card-bg: rgba(0, 0, 0, 0.03); --glass: rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="yellow"] {
+            --bg: #fdf6e3; /* Solarized light background */
+            --text: #657b83; /* Solarized text */
+            --nav-bg: rgba(253, 246, 227, 0.85);
+            --primary: #268bd2; /* Solarized blue */
+            --accent: #dc322f; /* Solarized red */
+            --card-bg: rgba(0, 0, 0, 0.02);
+            --glass: rgba(88, 110, 117, 0.1);
+            --gold: #b58900; /* Solarized yellow */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: 0.3s; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; padding-bottom: 80px; }
+
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
+
+        /* --- Preloader --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 100000;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+            visibility: visible; opacity: 1;
+        }
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .preloader-logo {
+            font-size: 4rem; color: var(--primary);
+            animation: preloader-pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes preloader-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: var(--nav-bg); 
+            backdrop-filter: blur(16px) saturate(180%);
+            padding: 15px 5%; 
+            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--glass); 
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo { font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 8px; font-size: 1.1rem; }
+
+        nav ul { display: flex; list-style: none; gap: 18px; }
+        nav ul li a { color: var(--text); text-decoration: none; font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 12px; transition: all 0.3s ease; position: relative; }
+        nav ul li a::after { content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 2px; background: var(--primary); transition: 0.3s; transform: translateX(-50%); }
+        nav ul li a:hover { color: var(--primary); background: rgba(0, 229, 255, 0.05); }
+        nav ul li a:hover::after { width: 80%; }
+
+        .partner-links { display: flex; gap: 10px; margin-right: 15px; border-right: 1px solid var(--glass); padding-right: 15px; }
+        .partner-btn { 
+            width: 38px; height: 38px; border-radius: 50%; text-decoration: none; font-weight: 900;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+            border: 1px solid var(--glass); background: var(--card-bg); color: var(--text);
+        }
+        .p-kareem:hover { border-color: #ff9800; color: #ff9800; box-shadow: 0 0 15px rgba(255, 152, 0, 0.4); transform: rotate(360deg); }
+        .p-abq:hover { border-color: #673ab7; color: #673ab7; box-shadow: 0 0 15px rgba(103, 58, 183, 0.4); transform: rotate(360deg); }
+
+        .wallet-box {
+            background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold);
+            padding: 8px 20px; border-radius: 50px; color: var(--gold); font-weight: 900; 
+            display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;
+        }
+        .wallet-box:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); transform: scale(1.05); }
+
+        /* Modal Base Style */
+        .custom-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+            display: none; justify-content: center; align-items: center; z-index: 9999;
+        }
+        .modal-content {
+            background: #111827; border: 2px solid var(--primary);
+            padding: 30px; border-radius: 25px; width: 90%; max-width: 500px;
+            text-align: center; position: relative; box-shadow: 0 0 50px rgba(0, 229, 255, 0.2);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-left: 20px;
+            border-left: 1px solid var(--glass);
+        }
+        .user-controls i, .user-controls a {
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: transparent;
+            border: 1px solid var(--glass);
+            color: var(--text); transition: 0.3s; cursor: pointer; text-decoration: none; font-size: 1.1rem;
+        }
+        .user-controls i:hover, .user-controls a:hover { 
+            border-color: var(--primary); color: var(--primary); 
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); transform: translateY(-3px); 
+        }
+        #admin-link, #logout-btn { color: var(--accent) !important; }
+        #admin-link:hover, #logout-btn:hover { border-color: var(--accent); color: var(--accent) !important; box-shadow: 0 0 15px rgba(255, 23, 68, 0.4); }
+        #theme-toggle { color: var(--primary) !important; }
+        #theme-toggle:hover { border-color: var(--primary); color: var(--primary) !important; }
+
+        .user-controls a i { color: inherit; }
+
+        #menu-toggle {
+            width: 24px;
+            height: 18px;
+            position: relative;
+            cursor: pointer;
+            color: var(--text);
+            transition: 0.3s;
+            transition: .5s ease-in-out;
+        }
+        #menu-toggle:hover { color: var(--primary); }
+
+        #menu-toggle span {
+            display: block; position: absolute; height: 3px; width: 100%;
+            background: var(--text); border-radius: 9px; opacity: 1;
+            left: 0; transform: rotate(0deg); transition: .25s ease-in-out;
+        }
+        #menu-toggle span:nth-child(1) { top: 0px; }
+        #menu-toggle span:nth-child(2) { top: 7.5px; }
+        #menu-toggle span:nth-child(3) { top: 15px; }
+
+        #menu-toggle.open span:nth-child(1) {
+            top: 7.5px;
+            transform: rotate(135deg);
+            background: var(--primary);
+        }
+        #menu-toggle.open span:nth-child(2) {
+            opacity: 0;
+            left: -60px;
+        }
+        #menu-toggle.open span:nth-child(3) {
+            top: 7.5px;
+            transform: rotate(-135deg);
+            background: var(--primary);
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            height: auto; /* تعديل: ارتفاع تلقائي */
+            width: 260px; 
+            position: fixed;
+            z-index: 10001;
+            top: 85px; /* تعديل: تحديد الموضع أسفل الهيدر */
+            right: -300px;
+            left: auto;
+            background-color: var(--nav-bg); /* استخدام لون الهيدر */
+            backdrop-filter: blur(16px) saturate(180%);
+            overflow-x: hidden;
+            transition: right 0.3s ease-out, opacity 0.3s ease-out; /* تسريع حركة الفتح */
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+            border-radius: 15px; /* تعديل: إضافة حواف دائرية */
+            border: 1px solid #ff0f39;
+        }
+        .sidebar-header { display: none; } /* تعديل: إخفاء الهيدر الداخلي للقائمة */
+        .sidebar a:first-of-type { padding-top: 15px; }
+        .sidebar a:last-of-type { padding-bottom: 15px; }
+        .sidebar-header .logo { font-size: 1.2rem; }
+        .sidebar a { padding: 12px 20px; text-decoration: none; font-size: 0.95rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 15px; transition: 0.3s; }
+        .sidebar a:hover { color: var(--primary); background: rgba(0, 229, 255, 0.05); border-right: 3px solid var(--primary); }
+        .sidebar a i { width: 20px; text-align: center; }
+        .sidebar .close-btn { font-size: 2rem; color: var(--text); padding: 0; }
+        .sidebar .close-btn:hover { color: var(--accent); background: none; border-right: none; }
+
+        #sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 10000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #sidebar-overlay.visible { display: block; opacity: 1; }
+
+        nav { flex-grow: 1; }
+        nav ul { justify-content: center; }
+
+        .hero { min-height: 90vh; display: flex; align-items: center; padding: 60px 8% 20px; gap: 40px; }
+        .hero-text { flex: 1.3; }
+        .hero-text h1 { font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 900; line-height: 1.15; margin-bottom: 25px; letter-spacing: -0.5px; color: var(--text); }
+        [data-theme="dark"] .hero-text h1 { text-shadow: 0 0 40px rgba(0, 229, 255, 0.15); }
+        
+        .hero-text h1 span {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .hero-description { font-size: 1.25rem; line-height: 1.7; opacity: 0.85; margin-bottom: 35px; text-align: justify; color: var(--text); font-weight: 500; }
+        
+        [data-theme="yellow"] .teacher-img { box-shadow: 0 0 40px #cb4b16; border-color: rgba(203, 75, 22, 0.3); }
+        
+        .teacher-img-container {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .img-glow-wrapper {
+            position: relative;
+            display: inline-block;
+            border-radius: 40px;
+            animation: floating 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .img-glow-wrapper::before, .img-glow-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -2px; /* تعديل: جعل الخط أرفع */
+            background: conic-gradient(from var(--angle), #ff1744, #ffd700, #00e5ff, #ff1744);
+            border-radius: 42px;
+            animation: rotate 8s linear infinite; /* تعديل: إبطاء الدوران لمظهر أرقى */
+            z-index: -1;
+        }
+        .img-glow-wrapper::after {
+            filter: blur(25px); /* تعديل: زيادة التوهج */
+        }
+
+        .teacher-img { 
+            max-width: 100%; 
+            border-radius: 40px;
+            display: block;
+            transition: transform 0.3s ease; 
+        }
+        .img-glow-wrapper:hover .teacher-img { transform: scale(1.02); }
+
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        @keyframes rotate {
+            to { --angle: -360deg; } /* تعديل: عكس اتجاه الدوران */
+        }
+
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .hero-btn {
+            padding: 14px 35px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .hero-btn.primary-btn {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 23, 68, 0.3);
+            border-color: var(--accent);
+        }
+        .hero-btn.primary-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 23, 68, 0.4);
+        }
+        .hero-btn.secondary-btn {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .hero-btn.secondary-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.25);
+        }
+
+        .mobile-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg);
+            backdrop-filter: blur(25px); display: none; justify-content: space-around;
+            padding: 12px 0; border-top: 1px solid var(--glass); z-index: 2000;
+            border-radius: 20px 20px 0 0;
+        }
+        .mobile-nav a { color: var(--text); text-decoration: none; font-size: 0.75rem; text-align: center; opacity: 0.7; padding: 8px 16px; border-radius: 15px; transition: all 0.3s ease; }
+        .mobile-nav a i { display: block; font-size: 1.4rem; color: var(--text); margin-bottom: 4px; transition: 0.3s; }
+        .mobile-nav a:hover, .mobile-nav a.active { color: var(--primary); background: rgba(0, 229, 255, 0.1); opacity: 1; }
+        .mobile-nav a:hover i, .mobile-nav a.active i { color: var(--primary); transform: translateY(-3px); }
+
+        @media (max-width: 1024px) {
+            header nav, .partner-links { display: none; }
+            .mobile-nav { display: flex; }
+            .hero { flex-direction: column-reverse; text-align: center; padding-top: 100px; }
+            .header-right {
+                gap: 10px;
+            }
+            .user-controls {
+                padding-left: 10px;
+                gap: 15px;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            #scrollTopBtn {
+                bottom: 80px; /* تعديل: ليكون فوق شريط الموبايل */
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo { display: none; }
+        }
+
+        /* Footer Styles */
+        .main-footer {
+            background: rgba(5, 10, 15, 0.95);
+            border-top: 1px solid var(--glass);
+            margin-top: 30px;
+            position: relative;
+            z-index: 5;
+            padding: 15px 0; /* زيادة الحشو للفوتر البسيط */
+        }
+        .footer-bottom {
+            text-align: center;
+            color: var(--text);
+            opacity: 0.7;
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .online-badge {
+            background: rgba(0, 255, 136, 0.1); color: #00ff88; padding: 2px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; border: 1px solid rgba(0, 255, 136, 0.2); margin-bottom: 0; font-size: 0.7rem;
+        }
+
+        /* --- زر الصعود للأعلى --- */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 40px;
+            left: 40px; /* تعديل: وضعه في اليسار لتجنب التعارض */
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            color: var(--bg);
+            border-radius: 50%;
+            display: none; /* مخفي افتراضياً */
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 229, 255, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        #scrollTopBtn:hover { transform: translateY(-5px); }
+
+        /* تنسيقات حاوية أكاديمية رؤيتي */
+        .academy-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, rgba(0, 229, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-right: 4px solid var(--primary);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: default;
+        }
+        
+        .academy-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.15);
+            border-color: var(--primary);
+        }
+
+        .academy-icon {
+            width: 45px; height: 45px;
+            background: rgba(0, 229, 255, 0.1);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary);
+            font-size: 1.3rem;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+        }
+
+        .academy-text {
+            display: flex; flex-direction: column;
+            text-align: right;
+        }
+
+        .academy-title { font-size: 1.1rem; font-weight: 900; color: var(--text); letter-spacing: 0.5px; }
+        .academy-subtitle { font-size: 0.9rem; color: var(--primary); opacity: 0.9; font-weight: 700; margin-top: 2px; }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <div id="preloader">
+        <div class="preloader-logo">🧬</div>
+    </div>
+
+    <div id="sidebar-menu" class="sidebar">
+        <!-- القائمة الجانبية الاحترافية -->
+        <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+        <a href="videos.html"><i class="fas fa-play"></i><span>المحاضرات</span></a>
+        <a href="exams.html"><i class="fas fa-file-pen"></i><span>الاختبارات</span></a>
+        <a href="live.html"><i class="fas fa-broadcast-tower"></i><span>لايف</span></a>
+        <a href="library.html"><i class="fas fa-download"></i><span>المذكرات</span></a>
+        <!-- ضع رابط المختبر الخارجي هنا بدلاً من # -->
+        <a href="lab.html"><i class="fas fa-cube"></i><span>المختبر التفاعلي</span></a>
+        <a href="contact.html"><i class="fas fa-envelope"></i><span>تواصل معنا</span></a>
+    </div>
+    <div id="sidebar-overlay"></div>
+
+    <div id="alert-overlay" class="custom-overlay">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <i class="fas fa-bullhorn" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
+            <h2 style="color:var(--primary); margin-bottom:10px;">تنبيه جديد 📢</h2>
+            <p id="alert-text" style="color:#cbd5e1; line-height:1.6; margin-bottom:25px;"></p>
+            <button onclick="closeCurrentAlert()" style="background:var(--primary); color:#000; border:none; padding:12px; border-radius:10px; width:100%; font-weight:bold; cursor:pointer;">فهمت ✅</button>
+        </div>
+    </div>
+
+    <div id="wallet-overlay" class="custom-overlay">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <i class="fas fa-wallet" style="font-size: 3rem; color: var(--gold); margin-bottom: 15px;"></i>
+            <h2 style="color:var(--gold); margin-bottom:10px;">شحن الرصيد</h2>
+            <p style="color:#cbd5e1; line-height:1.6; margin-bottom:25px;">
+                لشحن رصيد حسابك على المنصة، يرجى التواصل مع مستر شريف سالم مباشرة على الرقم التالي:<br>
+                <strong style="color: var(--primary); font-size: 1.4rem;">01111276700</strong>
+            </p>
+            <a href="https://wa.me/201111276700" target="_blank" style="background:#25d366; color:#fff; text-decoration:none; display:block; padding:12px; border-radius:10px; font-weight:bold; margin-bottom:10px;"><i class="fab fa-whatsapp"></i> مراسلة عبر واتساب</a>
+            <button onclick="document.getElementById('wallet-overlay').style.display='none'" style="background:rgba(255,255,255,0.1); color:#fff; border:none; padding:10px; border-radius:10px; width:100%; cursor:pointer;">إغلاق</button>
+        </div>
+    </div>
+
+    <header>
+        <div style="display: flex; align-items: center;">
+            <div id="menu-toggle"><span></span><span></span><span></span></div>
+            <div class="logo">🧬 <span id="welcome-name">تحميل...</span></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="videos.html"><i class="fas fa-play"></i> المحاضرات</a></li>
+                <li><a href="exams.html"><i class="fas fa-file-pen"></i> الاختبارات</a></li>
+                <li><a href="live.html"><i class="fas fa-broadcast-tower"></i> لايف</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-right">
+            <div class="partner-links">
+                <a href="https://kemo-omar.github.io/Kareem/" target="_blank" class="partner-btn p-kareem" title="منصة مستر كريم عمر">K</a>
+                <a href="https://mostafa7html7-pixel.github.io/Abqarieno-/" target="_blank" class="partner-btn p-abq" title="منصة سنتر عبقرينو">A</a>
+            </div>
+    
+            <div class="wallet-box" onclick="document.getElementById('wallet-overlay').style.display='flex'">
+                <i class="fas fa-wallet"></i>
+                <span id="user-balance">0</span> ج.م
+            </div>
+    
+            <div class="user-controls">
+                <a href="admin.html" id="admin-link" title="لوحة الإدارة" style="display: none;"><i class="fas fa-user-shield"></i></a>
+                <i class="fas fa-adjust" id="theme-toggle"></i>
+                <i class="fas fa-sign-out-alt" id="logout-btn" onclick="logout()"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="hero-text animate__animated animate__fadeInRight">
+            <div class="academy-container">
+                <div class="academy-icon">
+                    <img src="logo.png" alt="شعار الأكاديمية" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                </div>
+                <div class="academy-text">
+                    <span class="academy-title">أكاديمية رؤيتي التعليمية</span>
+                    <span class="academy-subtitle">ترحب بكم ..</span>
+                </div>
+            </div>
+            <h1>صانع الأوائل <br><span>مستر شريف سالم</span></h1>
+            <p class="hero-description">الدرجة النهائية ليست مجرد حلم، بل هي واقع نصنعه معاً. خبرة سنوات، شرح مبسط، ومتابعة دقيقة تضمن لك التفوق.</p>
+            <div class="hero-buttons">
+                <a href="videos.html" class="hero-btn primary-btn"><i class="fas fa-rocket"></i> ابدأ التعلم الآن</a>
+                <a href="library.html" class="hero-btn secondary-btn"><i class="fas fa-download"></i> المذكرات</a>
+                <!-- ضع رابط المختبر الخارجي هنا بدلاً من # -->
+                <a href="lab.html"  class="hero-btn secondary-btn"><i class="fas fa-cube"></i> المختبر التفاعلي</a>
+            </div>
+        </div>
+        <div class="teacher-img-container animate__animated animate__zoomIn">
+            <div class="img-glow-wrapper">
+                <img src="12345.jpg" alt="مستر شريف سالم" class="teacher-img" id="main-poster" fetchpriority="high">
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-bottom">
+            <div class="online-badge">
+                <span style="height:8px; width:8px; background:#00ff88; border-radius:50%; box-shadow: 0 0 10px #00ff88;"></span> الطلاب المتصلون الآن: <span id="real-count" style="font-weight: bold;">0</span>
+            </div>
+            <p>جميع الحقوق محفوظة لموقع مستر شريف سالم © 2026 | تطوير <span style="color: var(--primary);">K & A</span></p>
+        </div>
+    </footer>
+
+    <a href="#" id="scrollTopBtn" title="العودة للأعلى"><i class="fas fa-arrow-up"></i></a>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <!-- استدعاء ملف التهيئة الموحد بدلاً من تكرار الكود -->
+    <script src="firebase-init.js"></script>
+
+    <script>
+        // --- التحسينات الاحترافية ---
+        // 0. Preloader
+        window.addEventListener('load', () => {
+            document.getElementById('preloader').classList.add('hidden');
+        });
+
+        // --- أولاً: تهيئة واجهة المستخدم (لضمان عمل الأزرار دائماً) ---
+        
+        // 1. نظام السمات (Theme)
+        const themes = ['dark', 'light', 'yellow'];
+        const body = document.body;
+
+        function applyTheme(themeName) {
+            body.setAttribute('data-theme', themeName);
+            localStorage.setItem('theme', themeName);
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme && themes.includes(savedTheme)) {
+            applyTheme(savedTheme);
+        } else {
+            applyTheme('dark');
+        }
+
+        const themeBtn = document.getElementById('theme-toggle');
+        if(themeBtn) {
+            themeBtn.onclick = () => {
+                const currentTheme = body.getAttribute('data-theme');
+                const currentIndex = themes.indexOf(currentTheme);
+                const nextIndex = (currentIndex + 1) % themes.length;
+                applyTheme(themes[nextIndex]);
+            };
+        }
+
+        // 2. القائمة الجانبية (Sidebar)
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function openMenu() {
+            sidebar.style.right = '0';
+            overlay.classList.add('visible');
+            menuToggle.classList.add('open');
+        }
+
+        function closeMenu() {
+            sidebar.style.right = '-300px';
+            overlay.classList.remove('visible');
+            menuToggle.classList.remove('open');
+        }
+
+        if(menuToggle && sidebar && overlay) {
+            menuToggle.addEventListener('click', () => (menuToggle.classList.contains('open') ? closeMenu() : openMenu()));
+            overlay.addEventListener('click', closeMenu);
+        }
+
+        // 3. زر الصعود للأعلى (Scroll to Top)
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        if(scrollTopBtn) {
+            window.onscroll = () => {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    scrollTopBtn.style.display = "flex";
+                } else {
+                    scrollTopBtn.style.display = "none";
+                }
+            };
+            scrollTopBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        }
+
+        // --- ثانياً: منطق البيانات (Firebase) ---
+        const userPhone = localStorage.getItem('userLoggedIn');
+        const userName = localStorage.getItem('userName');
+        let alertQueue = [];
+
+        if (!userPhone) {
+            // تم تعطيل هذا السطر مؤقتاً لتتمكن من رؤية تصميم الصفحة
+            // في الوضع الطبيعي، هذا السطر يقوم بتحويل المستخدم غير المسجل إلى صفحة الدخول
+            // window.location.href = "go.html"; 
+        } else {
+            db.ref('students/' + userPhone).on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (!data) { logout(); return; }
+                if (data.status === "blocked") { window.location.href = "contact.html"; return; }
+                document.getElementById('user-balance').innerText = (data.balance || 0).toLocaleString();
+                document.getElementById('welcome-name').innerText = "أهلاً، " + data.name.split(' ')[0];
+                if (data.role === "admin" || userPhone === "01111276700") {
+                    document.getElementById('admin-link').style.display = "block";
+                }
+            });
+
+            // نظام التنبيهات المتعددة
+            db.ref('admin/global_alerts').once('value', (snapshot) => {
+                const seenAlerts = JSON.parse(localStorage.getItem('seenAlerts') || '[]');
+                snapshot.forEach((child) => {
+                    if (!seenAlerts.includes(child.key)) {
+                        alertQueue.push({ key: child.key, text: child.val().text });
+                    }
+                });
+                showNextAlert();
+            });
+
+            // حالة الاتصال
+            const myPresenceRef = db.ref('admin/online_list/' + userPhone);
+            myPresenceRef.set({ name: userName, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+            myPresenceRef.onDisconnect().remove();
+        }
+
+        function showNextAlert() {
+            if (alertQueue.length > 0) {
+                document.getElementById('alert-text').innerText = alertQueue[0].text;
+                document.getElementById('alert-overlay').style.display = 'flex';
+            }
+        }
+
+        function closeCurrentAlert() {
+            const current = alertQueue.shift();
+            let seen = JSON.parse(localStorage.getItem('seenAlerts') || '[]');
+            seen.push(current.key);
+            localStorage.setItem('seenAlerts', JSON.stringify(seen));
+            
+            document.getElementById('alert-overlay').style.display = 'none';
+            if (alertQueue.length > 0) {
+                setTimeout(showNextAlert, 500);
+            }
+        }
+
+        // عداد المتصلين
+        db.ref('admin/online_list').on('value', (snap) => {
+            document.getElementById('real-count').innerText = snap.numChildren() || 0;
+        });
+
+        function logout() { localStorage.clear(); window.location.href = "go.html"; }
+        
+        particlesJS('particles-js', {
+            particles: { number: { value: 50 }, color: { value: '#00e5ff' }, opacity: { value: 0.2 }, size: { value: 2 }, line_linked: { enable: true, opacity: 0.1 }, move: { enable: true, speed: 0.8 } }
+        });
+
+        // إنشاء ملف الـ Manifest برمجياً للتجربة
+        const manifestData = {
+            "name": "مستر شريف سالم",
+            "short_name": "الأحياء",
+            "start_url": "index.html",
+            "display": "standalone",
+            "background_color": "#05080f",
+            "theme_color": "#00e5ff",
+            "icons": [
+                { "src": "12345.jpg", "sizes": "1200x1200", "type": "image/jpeg" }
+            ]
+        };
+        const stringManifest = JSON.stringify(manifestData);
+        const blob = new Blob([stringManifest], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        document.querySelector('link[rel="manifest"]').setAttribute('href', manifestURL);
+    </script>
+</body>
+
+</html>

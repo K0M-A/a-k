@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المختبر التفاعلي | منصة مستر شريف سالم</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    
+    <style>
+        :root { 
+            --bg-color: #000000;
+            --accent-color: #D50000; 
+            --primary: #FFD700; 
+            --text: #e2e8f0;
+            --nav-bg: rgba(10, 10, 10, 0.9); 
+            --glass: rgba(255, 215, 0, 0.05);
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+
+        header {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(5, 10, 15, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+        .lab-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .back-btn {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+        .back-btn:hover {
+            filter: brightness(1.2);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .organ-card {
+            background: linear-gradient(145deg, rgba(20, 20, 25, 0.6), rgba(10, 10, 15, 0.4));
+            border: 1px solid rgba(255, 15, 57, 0.3);
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            content-visibility: auto;
+            contain-intrinsic-size: 400px;
+            opacity: 0;
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .organ-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 15, 57, 0.2);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 400px;
+            background-color: transparent;
+            --poster-color: transparent;
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        
+        model-viewer.loaded { opacity: 1; }
+        model-viewer:active { cursor: grabbing; }
+        
+        model-viewer:fullscreen {
+            background-color: var(--bg-color);
+            width: 100%;
+            height: 100%;
+        }
+
+        .model-placeholder {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+        }
+
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .progress-container {
+            width: 60%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .title-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 8px 26px;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .status {
+            font-size: 0.8rem;
+            color: #00ff88;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .details-btn {
+            margin-top: 15px;
+            padding: 10px 24px;
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .details-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 15, 57, 0.4);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid var(--accent-color);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 50px rgba(255, 15, 57, 0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: #64748b;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close-modal:hover { color: white; }
+
+        .fullscreen-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            font-size: 1.2rem;
+        }
+        .fullscreen-btn:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .grid-container { grid-template-columns: 1fr; padding: 15px; }
+            model-viewer { height: 300px; }
+            header { padding: 15px; }
+            .lab-title { font-size: 1.2rem; }
+            .back-btn { font-size: 0.9rem; }
+        }
+
+        /* Card Loader Overlay */
+        .card-loader {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(5px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 20; border-radius: 24px;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+        .card-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-ring {
+            width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 10px;
+        }
+        .loader-text { font-size: 0.85rem; color: var(--text); opacity: 0.8; font-weight: bold; }
+
+        /* Music Button */
+        #music-toggle-btn {
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: transparent;
+            border: 1px solid var(--glass);
+            color: var(--text); transition: 0.3s; cursor: pointer; font-size: 1rem;
+        }
+        #music-toggle-btn:hover {
+            border-color: var(--primary); color: var(--primary); 
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); transform: translateY(-2px); 
+        }
+        #music-toggle-btn.playing {
+            color: var(--primary);
+            border-color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.5); }
+            100% { box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
+        }
+
+        /* Sidebar Menu Styles */
+        .sidebar {
+            height: auto;
+            width: 260px; 
+            position: fixed;
+            z-index: 10001;
+            top: 85px;
+            right: -300px;
+            left: auto;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            overflow-x: hidden;
+            transition: right 0.3s ease-out, opacity 0.3s ease-out;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid #ff0f39;
+        }
+        .sidebar a { padding: 12px 20px; text-decoration: none; font-size: 0.95rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 15px; transition: 0.3s; }
+        .sidebar a:hover { color: var(--primary); background: rgba(0, 229, 255, 0.05); border-right: 3px solid var(--primary); }
+        .sidebar a i { width: 20px; text-align: center; }
+        
+        #sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 10000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #sidebar-overlay.visible { display: block; opacity: 1; }
+
+        #menu-toggle {
+            width: 24px; height: 18px; position: relative; cursor: pointer; transition: .5s ease-in-out;
+        }
+        #menu-toggle span {
+            display: block; position: absolute; height: 3px; width: 100%; background: #fff; border-radius: 9px; opacity: 1; left: 0; transform: rotate(0deg); transition: .25s ease-in-out;
+        }
+        #menu-toggle span:nth-child(1) { top: 0px; }
+        #menu-toggle span:nth-child(2) { top: 7.5px; }
+        #menu-toggle span:nth-child(3) { top: 15px; }
+        #menu-toggle.open span:nth-child(1) { top: 7.5px; transform: rotate(135deg); background: var(--primary); }
+        #menu-toggle.open span:nth-child(2) { opacity: 0; left: -60px; }
+        #menu-toggle.open span:nth-child(3) { top: 7.5px; transform: rotate(-135deg); background: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <audio id="background-music" src="mp3.mp3" loop preload="auto"></audio>
+
+    <div id="sidebar-menu" class="sidebar">
+        <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+        <a href="videos.html"><i class="fas fa-play"></i><span>المحاضرات</span></a>
+        <a href="exams.html"><i class="fas fa-file-pen"></i><span>الاختبارات</span></a>
+        <a href="live.html"><i class="fas fa-broadcast-tower"></i><span>لايف</span></a>
+        <a href="library.html"><i class="fas fa-download"></i><span>المذكرات</span></a>
+        <a href="lab.html"><i class="fas fa-cube"></i><span>المختبر التفاعلي</span></a>
+        <a href="contact.html"><i class="fas fa-envelope"></i><span>تواصل معنا</span></a>
+    </div>
+    <div id="sidebar-overlay"></div>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div id="menu-toggle"><span></span><span></span><span></span></div>
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> العودة للرئيسية</a>
+        </div>
+        <div class="lab-title">المختبر التفاعلي</div>
+        <div><i class="fas fa-music" id="music-toggle-btn" title="تشغيل/إيقاف الموسيقى"></i></div>
+    </header>
+
+    <div class="grid-container">
+        
+        <div class="organ-card">
+            <span class="title-badge">Heart | القلب</span>
+            <model-viewer 
+                data-src="heart.glb" 
+                loading="lazy"
+                camera-controls 
+                auto-rotate 
+                rotation-per-second="30deg"
+                auto-rotate-delay="0"
+                shadow-intensity="0.5" 
+                exposure="1.2" 
+                ar
+                environment-image="neutral"
+                ar-modes="webxr scene-viewer quick-look">
+            </model-viewer>
+            <div class="status">جاهز للعرض</div>
+            <button class="details-btn" onclick="openModal('القلب البشري', 'القلب هو عضو عضلي بحجم قبضة اليد، يضخ الدم عبر شبكة من الأوعية الدموية. ينبض القلب حوالي 100,000 مرة في اليوم.')">عرض التفاصيل الطبية</button>
+        </div>
+
+        <div class="organ-card">
+            <span class="title-badge">Lungs | الرئتين</span>
+            <model-viewer 
+                data-src="human lungs.glb" 
+                loading="lazy"
+                camera-controls 
+                auto-rotate 
+                rotation-per-second="30deg"
+                auto-rotate-delay="0"
+                bounds="tight"
+                shadow-intensity="0.5" 
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                exposure="1" 
+                environment-image="neutral">
+            </model-viewer>
+            <div class="status">جاهز للعرض</div>
+            <button class="details-btn" onclick="openModal('الرئتين', 'الرئتان هما العضوان الرئيسيان في الجهاز التنفسي، وتعملان على استخلاص الأكسجين من الهواء ونقله إلى مجرى الدم.')">عرض التفاصيل الطبية</button>
+        </div>
+
+        <div class="organ-card">
+            <span class="title-badge">Kidney | الكلية</span>
+            <model-viewer 
+                data-src="human_kidney_anatomy.glb" 
+                loading="lazy"
+                camera-controls 
+                auto-rotate 
+                rotation-per-second="30deg"
+                auto-rotate-delay="0"
+                shadow-intensity="0.5" 
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                exposure="1.3" 
+                environment-image="neutral">
+            </model-viewer>
+            <div class="status">جاهز للعرض</div>
+            <button class="details-btn" onclick="openModal('الكلية', 'الكلى هي أعضاء حيوية تقوم بتنقية الدم من الفضلات والسموم، وتلعب دوراً أساسياً في تنظيم ضغط الدم وتوازن السوائل.')">عرض التفاصيل الطبية</button>
+        </div>
+
+      
+          <div class="organ-card">
+            <span class="title-badge">Muscular System | العضلات</span>
+            <model-viewer 
+                data-src="ecorche_-_anatomy_study.glb" 
+                loading="lazy"
+                camera-controls 
+                auto-rotate 
+                rotation-per-second="30deg"
+                auto-rotate-delay="0"
+                shadow-intensity="0.5" 
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                exposure="1.3" 
+                environment-image="neutral">
+            </model-viewer>
+            <div class="status">جاهز للعرض</div>
+            <button class="details-btn" onclick="openModal('الجهاز العضلي', 'يتكون الجهاز العضلي من أكثر من 600 عضلة، وهي المسؤولة عن الحركة والحفاظ على وضعية الجسم.')">عرض التفاصيل الطبية</button>
+        </div>
+
+       
+  <div class="organ-card">
+            <span class="title-badge">Heart Model | نموذج قلب</span>
+            <model-viewer 
+                data-src="another_3d_model_of_the_human_heart..glb" 
+                loading="lazy"
+                camera-controls 
+                auto-rotate 
+                rotation-per-second="30deg"
+                auto-rotate-delay="0"
+                shadow-intensity="0.5" 
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                exposure="1.3" 
+                environment-image="neutral">
+            </model-viewer>
+            <div class="status">جاهز للعرض</div>
+            <button class="details-btn" onclick="openModal('نموذج القلب', 'دراسة تفصيلية لحجرات القلب الأربعة والصمامات التي تنظم تدفق الدم.')">عرض التفاصيل الطبية</button>
+            </div>
+
+         
+                  
+
+             
+              <div class="organ-card">
+            <span class="title-badge">Realistic Lungs | رئتين واقعية</span>
+            <model-viewer 
+                data-src="realistic_human_lungs.glb" 
+                loading="lazy"
+                camera-controls 
+                auto-rotate 
+                rotation-per-second="30deg"
+                auto-rotate-delay="0"
+                shadow-intensity="0.5" 
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                exposure="1.3" 
+                environment-image="neutral">
+            </model-viewer>
+            <div class="status">جاهز للعرض</div>
+            <button class="details-btn" onclick="openModal('رئتين واقعية', 'محاكاة لنسيج الرئة والشعب الهوائية بدقة عالية.')">عرض التفاصيل الطبية</button>
+            </div>
+
+
+          
+    </div>
+
+    <!-- هيكل النافذة المنبثقة -->
+    <div class="modal-overlay" id="infoModal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal(event)">&times;</span>
+            <h2 id="modalTitle" style="color: var(--accent-color); margin-top: 0;">عنوان العضو</h2>
+            <p id="modalDesc" style="color: #cbd5e1; line-height: 1.6;">وصف تفصيلي للعضو...</p>
+            <button class="details-btn" onclick="closeModal(event)" style="width: auto; margin-top: 20px;">إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.organ-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            
+            const fsBtn = document.createElement('button');
+            fsBtn.className = 'fullscreen-btn';
+            fsBtn.innerHTML = '⛶';
+            fsBtn.title = 'تكبير ملء الشاشة';
+            fsBtn.onclick = () => {
+                const model = card.querySelector('model-viewer');
+                if (model.requestFullscreen) {
+                    model.requestFullscreen();
+                } else if (model.webkitRequestFullscreen) { /* Safari */
+                    model.webkitRequestFullscreen();
+                }
+            };
+            card.appendChild(fsBtn);
+        });
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '200px',
+            threshold: 0.01
+        };
+
+        const modelObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const model = entry.target;
+                    if (model.dataset.src) {
+                        model.src = model.dataset.src;
+                        delete model.dataset.src;
+                    }
+                    observer.unobserve(model);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('model-viewer').forEach((model) => {
+            // إضافة غطاء التحميل للحاوية (البطاقة)
+            const card = model.closest('.organ-card');
+            const loader = document.createElement('div');
+            loader.className = 'card-loader';
+            loader.innerHTML = `
+                <div class="loader-ring"></div>
+                <div class="loader-text">جاري التجهيز 0%</div>
+            `;
+            card.appendChild(loader);
+            
+            const loadingText = loader.querySelector('.loader-text');
+
+            model.addEventListener('load', () => {
+                model.classList.add('loaded');
+                loader.classList.add('hidden');
+            });
+
+            model.addEventListener('progress', (event) => {
+                const progress = event.detail.totalProgress * 100;
+                loadingText.innerText = `جاري التجهيز ${Math.round(progress)}%`;
+            });
+
+            modelObserver.observe(model);
+        });
+
+        function openModal(title, desc) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('infoModal').classList.add('active');
+        }
+
+        function closeModal(event) {
+            if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('close-modal') || event.target.tagName === 'BUTTON') {
+                document.getElementById('infoModal').classList.remove('active');
+            }
+        }
+
+        // Sidebar Logic
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function openMenu() {
+            sidebar.style.right = '0';
+            overlay.classList.add('visible');
+            menuToggle.classList.add('open');
+        }
+        function closeMenu() {
+            sidebar.style.right = '-300px';
+            overlay.classList.remove('visible');
+            menuToggle.classList.remove('open');
+        }
+        menuToggle.addEventListener('click', () => (sidebar.style.right === '0px' ? closeMenu() : openMenu()));
+        overlay.addEventListener('click', closeMenu);
+
+        // Music Player Logic
+        const musicToggleBtn = document.getElementById('music-toggle-btn');
+        const backgroundMusic = document.getElementById('background-music');
+        
+        musicToggleBtn.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play()
+                    .then(() => {
+                        musicToggleBtn.classList.add('playing');
+                    })
+                    .catch(error => {
+                        console.error("خطأ في تشغيل الصوت:", error);
+                        alert("عذراً، تعذر تشغيل الملف الصوتي (mp3.mp3). تأكد من أن الملف هو ملف صوتي فعلي.");
+                    });
+            } else {
+                backgroundMusic.pause();
+                musicToggleBtn.classList.remove('playing');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

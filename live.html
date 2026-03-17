@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الاستوديو المباشر | أ. شريف</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- شاشة الدخول --- */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000000; z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .login-box { 
+            background: #111; padding: 30px; border-radius: 15px;
+            box-shadow: 0 0 20px #D50000; text-align: center; width: 300px; border: 1px solid #333;
+        }
+        .login-box input {
+            width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px;
+            border: 1px solid #FFD700; background: #222; color: white; box-sizing: border-box;
+        }
+        .login-box button {
+            background: #D50000; color: white; border: none; padding: 12px;
+            border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold;
+        }
+
+        /* --- السبورة --- */
+        #drawingCanvas {
+            background-color: #ffffff; cursor: crosshair;
+            width: 100%; height: 500px; border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); touch-action: none;
+        }
+        .board-container { display: flex; gap: 15px; flex-wrap: wrap; padding: 10px; }
+        .canvas-area { flex: 1; min-width: 300px; }
+        .students-panel {
+            width: 250px; background: #1a1a2e; padding: 15px; border-radius: 10px;
+            display: none; color: white; max-height: 500px; overflow-y: auto;
+        }
+        .student-item {
+            background: #0f3460; padding: 10px; margin-bottom: 8px; border-radius: 5px;
+            display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;
+        }
+        .student-item button {
+            background: #e94560; color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer;
+        }
+        .student-item button.allowed { background: #39ff14; color: black; }
+        .teacher-tools { display: none; margin-bottom: 10px; background: #0f3460; padding: 10px; border-radius: 10px; gap: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h2 style="color:white; font-family:'Cairo'"><i class="fas fa-unlock-alt"></i> دخول المنصة</h2>
+            <input type="text" id="userNameInput" placeholder="اكتب اسمك الحقيقي...">
+            <input type="password" id="passwordInput" placeholder="كلمة السر">
+            <button id="finalLoginBtn">دخول الآن</button>
+            <p id="loginError" style="color: #ff4d4d; display: none; margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="logo">BIO-<span class="neon-text">SHERIF</span></div>
+        <div id="userInfoDisplay" style="color: #39ff14; font-weight: bold;"></div>
+    </header>
+
+    <main class="studio-hub" style="padding: 20px; text-align: center;">
+        <div class="opt-card green-glow" onclick="switchSystem('board')" style="display:inline-block; cursor:pointer; padding: 20px; background:#1a1a2e; border-radius:10px; color:white;">
+            <i class="fas fa-chalkboard-teacher" style="font-size: 2rem;"></i>
+            <h3>فتح السبورة الذكية</h3>
+        </div>
+    </main>
+
+    <section id="workspace" style="display: none; padding: 10px;">
+        <button onclick="closeWorkspace()" style="background:#e94560; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer; margin-bottom:10px;">إغلاق X</button>
+        
+        <div id="board-system">
+            <div class="teacher-tools" id="teacherTools">
+                <input type="color" id="colorPicker" value="#000000">
+                <button onclick="window.currentSize = 2">قلم رفيع</button>
+                <button onclick="window.currentSize = 8">قلم عريض</button>
+                <button id="clearBoardBtn" style="background:red; color:white;">مسح الكل</button>
+            </div>
+
+            <div class="board-container">
+                <div class="canvas-area">
+                    <canvas id="drawingCanvas"></canvas>
+                </div>
+                <div class="students-panel" id="studentsPanel">
+                    <h3 style="font-size:1rem; border-bottom:1px solid #444">الطلاب المتصلون</h3>
+                    <div id="studentsList"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, onChildAdded, set, onValue, remove, onDisconnect, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCcFRLMsewcgYXYgVvdkyQHf-imoJHHzng",
+            authDomain: "mrhamdy-1c406.firebaseapp.com",
+            databaseURL: "https://mrhamdy-1c406-default-rtdb.firebaseio.com",
+            projectId: "mrhamdy-1c406",
+            storageBucket: "mrhamdy-1c406.firebasestorage.app",
+            messagingSenderId: "806268398144",
+            appId: "1:806268398144:web:c40aef6b378377f72b4da5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let myName = "";
+        let isTeacher = false;
+        let canIDraw = false;
+        const myId = "id_" + Math.random().toString(36).substr(2, 9);
+
+        // مراجع الداتا بيز
+        const usersRef = ref(db, "active_users");
+        const myUserRef = ref(db, `active_users/${myId}`);
+        const boardRef = ref(db, "board_drawings");
+        const clearCmdRef = ref(db, "board_commands/clear");
+
+        // --- نظام الدخول ---
+        document.getElementById("finalLoginBtn").onclick = () => {
+            const userVal = document.getElementById("userNameInput").value.trim();
+            const passVal = document.getElementById("passwordInput").value.trim();
+            const err = document.getElementById("loginError");
+
+            if(userVal === "") { err.innerText="ادخل اسمك!"; err.style.display="block"; return; }
+
+            if(passVal === "2027") {
+                isTeacher = true; canIDraw = true; myName = "أ. شريف";
+                loginSuccess();
+            } else if(passVal === "2026") {
+                isTeacher = false; canIDraw = false; myName = userVal;
+                loginSuccess();
+            } else {
+                err.innerText="كلمة السر خطأ!"; err.style.display="block";
+            }
+        };
+
+        function loginSuccess() {
+            // تصحيح: إخفاء الشاشة فوراً وبشكل صريح
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("userInfoDisplay").innerText = "مرحباً: " + myName;
+
+            set(myUserRef, { name: myName, role: isTeacher ? "teacher" : "student", canDraw: canIDraw });
+            onDisconnect(myUserRef).remove();
+
+            if (isTeacher) {
+                document.getElementById("teacherTools").style.display = "flex";
+                document.getElementById("studentsPanel").style.display = "block";
+                monitorStudents();
+            } else {
+                monitorMyPermission();
+            }
+            initCanvasLogic();
+        }
+
+        // --- التحكم في الصلاحيات ---
+        function monitorStudents() {
+            onValue(usersRef, (snap) => {
+                const list = document.getElementById("studentsList");
+                list.innerHTML = "";
+                snap.forEach((child) => {
+                    const user = child.val();
+                    if (user.role === "student") {
+                        const div = document.createElement("div");
+                        div.className = "student-item";
+                        div.innerHTML = `<span>${user.name}</span><button class="${user.canDraw ? 'allowed' : ''}">${user.canDraw ? 'مسموح' : 'منع'}</button>`;
+                        div.querySelector('button').onclick = () => {
+                            update(ref(db, `active_users/${child.key}`), { canDraw: !user.canDraw });
+                        };
+                        list.appendChild(div);
+                    }
+                });
+            });
+        }
+
+        function monitorMyPermission() {
+            onValue(myUserRef, (snap) => {
+                if (snap.exists()) canIDraw = snap.val().canDraw;
+            });
+        }
+
+        // --- نظام السبورة ---
+        const canvas = document.getElementById("drawingCanvas");
+        const ctx = canvas.getContext("2d");
+        window.currentSize = 2;
+
+        window.resizeCanvas = () => {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = 500;
+        };
+
+        function initCanvasLogic() {
+            let drawing = false;
+            const getCoords = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+                return { x, y };
+            };
+
+            const start = (e) => {
+                if (!canIDraw) return;
+                drawing = true;
+                const { x, y } = getCoords(e);
+                push(boardRef, { t: "s", x, y, c: document.getElementById("colorPicker").value, s: window.currentSize });
+            };
+
+            const move = (e) => {
+                if (!drawing || !canIDraw) return;
+                if(e.cancelable) e.preventDefault();
+                const { x, y } = getCoords(e);
+                push(boardRef, { t: "d", x, y, c: document.getElementById("colorPicker").value, s: window.currentSize });
+            };
+
+            canvas.addEventListener("mousedown", start);
+            canvas.addEventListener("mousemove", move);
+            window.addEventListener("mouseup", () => drawing = false);
+            canvas.addEventListener("touchstart", start, {passive:false});
+            canvas.addEventListener("touchmove", move, {passive:false});
+        }
+
+        onChildAdded(boardRef, (snap) => {
+            const data = snap.val();
+            ctx.lineWidth = data.s; ctx.lineCap = "round"; ctx.strokeStyle = data.c;
+            if (data.t === "s") { ctx.beginPath(); ctx.moveTo(data.x, data.y); }
+            else { ctx.lineTo(data.x, data.y); ctx.stroke(); }
+        });
+
+        document.getElementById("clearBoardBtn").onclick = () => { if(isTeacher) { remove(boardRef); set(clearCmdRef, Date.now()); } };
+        onValue(clearCmdRef, () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+
+        // وظائف الواجهة
+        window.switchSystem = (sys) => {
+            document.getElementById('workspace').style.display = 'block';
+            if(sys === 'board') setTimeout(window.resizeCanvas, 50);
+        };
+        window.closeWorkspace = () => document.getElementById('workspace').style.display = 'none';
+    </script>
+</body>
+</html>
