@@ -148,6 +148,17 @@
         #theme-toggle { color: var(--primary) !important; }
         #theme-toggle:hover { border-color: var(--primary); color: var(--primary) !important; }
 
+        #music-toggle-btn.playing {
+            color: var(--primary) !important;
+            border-color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.5); }
+            100% { box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
+        }
+
         .user-controls a i { color: inherit; }
 
         #menu-toggle {
@@ -450,6 +461,8 @@
 </head>
 <body data-theme="dark">
 
+    <audio id="background-music" src="mp3.mp3" loop preload="auto"></audio>
+
     <div id="preloader">
         <div class="preloader-logo">🧬</div>
     </div>
@@ -517,6 +530,7 @@
     
             <div class="user-controls">
                 <a href="admin.html" id="admin-link" title="لوحة الإدارة" style="display: none;"><i class="fas fa-user-shield"></i></a>
+                <i class="fas fa-music" id="music-toggle-btn" title="تشغيل/إيقاف الموسيقى"></i>
                 <i class="fas fa-adjust" id="theme-toggle"></i>
                 <i class="fas fa-sign-out-alt" id="logout-btn" onclick="logout()"></i>
             </div>
@@ -638,6 +652,27 @@
             scrollTopBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        }
+
+        // 4. مشغل الموسيقى
+        const musicToggleBtn = document.getElementById('music-toggle-btn');
+        const backgroundMusic = document.getElementById('background-music');
+        
+        if(musicToggleBtn && backgroundMusic) {
+            musicToggleBtn.addEventListener('click', () => {
+                if (backgroundMusic.paused) {
+                    backgroundMusic.play()
+                        .then(() => {
+                            musicToggleBtn.classList.add('playing');
+                        })
+                        .catch(error => {
+                            console.error("خطأ في تشغيل الصوت:", error);
+                        });
+                } else {
+                    backgroundMusic.pause();
+                    musicToggleBtn.classList.remove('playing');
+                }
             });
         }
 
