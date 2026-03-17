@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الاحترافية | مستر شريف سالم</title>
+    <title>لوحة التحكم الاحترافية | دكتور شريف سالم</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -97,7 +97,7 @@
 <body>
 
     <aside>
-        <h2>لوحة المستر 🧬</h2>
+        <h2>لوحة الدكتور 🧬</h2>
         <button class="nav-btn active" id="btn-dashboard" onclick="showSection('dashboard', this)"><i class="fas fa-chart-line"></i> الإحصائيات</button>
         <button class="nav-btn" id="btn-students" onclick="showSection('students', this)"><i class="fas fa-users"></i> الطلاب</button>
         <button class="nav-btn" id="btn-balance" onclick="showSection('balance-section', this)"><i class="fas fa-wallet"></i> المحفظة</button>
@@ -108,7 +108,7 @@
 
     <main>
         <div id="dashboard" class="section active">
-            <h1>أهلاً بك يا مستر شريف..</h1>
+            <h1>أهلاً بك يا دكتور شريف..</h1>
             <div class="stats-grid">
                 <div class="stat-card hidden-val" onclick="this.classList.toggle('hidden-val')">
                     <i class="fas fa-coins"></i>
@@ -204,7 +204,7 @@
         }
 
         const presenceRef = db.ref('admin/online_list/' + myPhone);
-        presenceRef.set({ name: "Mr. Sherif", status: "online" });
+        presenceRef.set({ name: "Dr. Sherif", status: "online" });
         presenceRef.onDisconnect().remove();
         db.ref('admin/online_list').on('value', s => document.getElementById('online-now').innerText = s.numChildren() || 0);
 
@@ -280,7 +280,7 @@
                     const msgID = child.key;
                     if(m.role === 'student' && !m.readByAdmin) db.ref(`chats/private/${phone}/${msgID}`).update({readByAdmin:true});
                     
-                    const senderDisplay = m.role === 'admin' ? "مستر شريف (أنت)" : sName;
+                    const senderDisplay = m.role === 'admin' ? "دكتور شريف (أنت)" : sName;
                     const time = m.timestamp ? new Date(m.timestamp).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'}) : '';
                     let content = m.type === 'image' ? `<img src="${m.message}" onclick="window.open(this.src)">` : m.message;
                     

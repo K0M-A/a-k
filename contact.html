@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>منصة مستر شريف سالم | التواصل المتقدم</title>
+    <title>منصة دكتور شريف سالم | التواصل المتقدم</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -133,12 +133,12 @@
         <div class="select-card" onclick="startApp('public')">
             <i class="fas fa-bullhorn"></i>
             <h3>القناة العامة</h3>
-            <p style="color: #888; font-size: 0.75rem; margin-top: 5px;">أحدث تنبيهات المستر للجميع</p>
+            <p style="color: #888; font-size: 0.75rem; margin-top: 5px;">أحدث تنبيهات الدكتور للجميع</p>
         </div>
         <div class="select-card" onclick="startApp('private')">
             <i class="fas fa-comment-medical"></i>
             <h3>المراسلة الخاصة</h3>
-            <p style="color: #888; font-size: 0.75rem; margin-top: 5px;">محادثة سرية مع المستر</p>
+            <p style="color: #888; font-size: 0.75rem; margin-top: 5px;">محادثة سرية مع الدكتور</p>
         </div>
     </div>
 
@@ -147,7 +147,7 @@
             <i class="fas fa-user-slash" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
             <h2 style="color: var(--accent);">تم حظر حسابك</h2>
             <p style="color: #ccc; margin: 15px 0;">يرجى مراجعة الإدارة لفك الحظر.</p>
-            <a href="https://wa.me/201234567890" style="display: block; padding: 12px; background: #25d366; color: white; text-decoration: none; border-radius: 10px; font-weight: bold;">واتساب المستر</a>
+            <a href="https://wa.me/201234567890" style="display: block; padding: 12px; background: #25d366; color: white; text-decoration: none; border-radius: 10px; font-weight: bold;">واتساب الدكتور</a>
         </div>
     </div>
 
@@ -186,7 +186,7 @@
             </div>
             
             <div id="admin-only-note" style="display:none; text-align:center; padding:15px; color:#888; font-size:0.8rem;">
-                 المستر فقط ينشر هنا، تابع الرسائل بالأسفل
+                 الدكتور فقط ينشر هنا، تابع الرسائل بالأسفل
             </div>
         </div>
     </div>
@@ -234,7 +234,7 @@
             }
 
             document.getElementById('user-display-name').innerText = userData.name;
-            document.getElementById('role-badge').innerText = userData.role === 'admin' ? 'المدير (المستر)' : 'طالب';
+            document.getElementById('role-badge').innerText = userData.role === 'admin' ? 'المدير (الدكتور)' : 'طالب';
             
             if (userData.role === 'admin') {
                 document.body.classList.add('is-admin');

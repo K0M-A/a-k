@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساهم في نشر المنصة | دكتور شريف سالم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #FFD700; --bg: #000000; --text: #ffffff; --card-bg: #111; }
+        body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; text-align: center; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .container { width: 100%; max-width: 500px; background: var(--card-bg); padding: 40px 30px; border-radius: 25px; border: 1px solid var(--primary); box-shadow: 0 0 30px rgba(255, 215, 0, 0.15); }
+        h1 { color: var(--primary); margin-bottom: 10px; font-weight: 900; }
+        p { color: #ccc; margin-bottom: 25px; line-height: 1.6; }
+        .qr-img { width: 100%; max-width: 280px; border-radius: 15px; border: 3px solid var(--primary); margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .link-box { background: #222; padding: 15px; border-radius: 12px; border: 1px dashed #555; word-wrap: break-word; margin-bottom: 20px; user-select: all; direction: ltr; font-family: monospace; color: var(--primary); font-size: 0.9rem; }
+        .btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; background: var(--primary); color: #000; text-decoration: none; border-radius: 12px; font-weight: 900; margin-bottom: 12px; cursor: pointer; border: none; font-size: 1rem; transition: 0.3s; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: #000; }
+        .back-link { display: inline-block; margin-top: 15px; color: #888; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .back-link:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <i class="fas fa-share-nodes" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+        <h1>ساهم في نشر العلم</h1>
+        <p>ساعد أصدقائك في الوصول لأقوى منصة شرح للأحياء<br>شارك الرابط أو الكود الآن!</p>
+        
+        <img src="3244343.png" alt="QR Code" class="qr-img">
+        
+        <div class="link-box" id="share-link">https://k0m-a.github.io/a-k/</div>
+        
+        <button class="btn" onclick="copyLink()"><i class="fas fa-copy"></i> نسخ الرابط</button>
+        <button class="btn btn-outline" onclick="shareNative()"><i class="fas fa-share-alt"></i> مشاركة الرابط</button>
+        
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+    </div>
+
+    <script>
+        function copyLink() {
+            navigator.clipboard.writeText(document.getElementById('share-link').innerText);
+            alert("تم نسخ رابط المنصة بنجاح ✅");
+        }
+        async function shareNative() {
+            if (navigator.share) {
+                try { await navigator.share({ title: 'منصة دكتور شريف سالم', text: 'أقوى منصة لشرح الأحياء للمرحلة الثانوية.. ادخل الآن!', url: 'https://k0m-a.github.io/a-k/' }); } catch (err) {}
+            } else { copyLink(); }
+        }
+    </script>
+</body>
+</html>
