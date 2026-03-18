@@ -91,6 +91,29 @@
             background: var(--primary); color: #000; border: none; padding: 12px 30px;
             border-radius: 50px; font-weight: bold; margin-top: 20px; cursor: pointer; width: 100%;
         }
+        .book-card .card-cover-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .pdf-container-wrapper {
+            grid-column: 1 / -1; /* Make it span full width */
+            background: rgba(0,0,0,0.2);
+            border-radius: 25px;
+            padding: 30px;
+            margin-top: 40px;
+            border: 1px solid var(--glass);
+        }
+        .pdf-container-wrapper h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 900;
+        }
 
         /* شاشة التحميل */
         .loader-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #555; }
@@ -166,6 +189,86 @@
             <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">تدريبات تفاعلية على نماذج الاختبارات العملية.</p>
             <button class="open-btn" style="background: var(--accent); color: white;">بدأ الاختبار</button>
         </div>
+
+        <!-- الحاوية الاحترافية الجديدة -->
+        <div class="pdf-container-wrapper">
+            <h2><i class="fas fa-folder-open"></i> مذكرات الأحياء (صف 12 ترم 2)</h2>
+            <div class="library-grid">
+                <!-- ملفات PDF الجديدة -->
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1d9fpLp9qDUN7SxtillL0cjUERCfNepZV/preview', 'مذكرة أحياء (1)')">
+                    <div style="font-size: 0.8rem; background: #9C27B0; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #9C27B0;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (1)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #9C27B0; color: white;">عرض المذكرة</button>
+                </div>
+
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1x_33Z8NgNwoqkewBOuEIu_5MfKGuAJ1H/preview', 'مذكرة أحياء (2)')">
+                    <div style="font-size: 0.8rem; background: #1E88E5; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #1E88E5;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (2)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #1E88E5; color: white;">عرض المذكرة</button>
+                </div>
+
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1OlmZEibbvGU2GB_-2fQTq8Svz4H7DH13/preview', 'مذكرة أحياء (3)')">
+                    <div style="font-size: 0.8rem; background: #00897B; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #00897B;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (3)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #00897B; color: white;">عرض المذكرة</button>
+                </div>
+
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1r_u0laFam6NAbTuFq2R_2w29DPRh7VAQ/preview', 'مذكرة أحياء (4)')">
+                    <div style="font-size: 0.8rem; background: #F4511E; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #F4511E;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (4)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #F4511E; color: white;">عرض المذكرة</button>
+                </div>
+
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1emRUUq___eK8rF2sztKcKVVQu38o6mQV/preview', 'مذكرة أحياء (5)')">
+                    <div style="font-size: 0.8rem; background: #5E35B1; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #5E35B1;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (5)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #5E35B1; color: white;">عرض المذكرة</button>
+                </div>
+
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1x8qG_vEabyRvVHh1UNJXAdt5ArFDLM14/preview', 'مذكرة أحياء (6)')">
+                    <div style="font-size: 0.8rem; background: #D81B60; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #D81B60;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (6)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #D81B60; color: white;">عرض المذكرة</button>
+                </div>
+
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1oX_9WYicIcXrQF7Uk6LCT9EIJADfoA9_/preview', 'مذكرة أحياء (7)')">
+                    <div style="font-size: 0.8rem; background: #9C27B0; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #9C27B0;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (7)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #9C27B0; color: white;">عرض المذكرة</button>
+                </div>
+
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1U5iJZ9L3m52lMYUuqQSoX4lyC6AcU3yH/preview', 'مذكرة أحياء (8)')">
+                    <div style="font-size: 0.8rem; background: #1E88E5; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #1E88E5;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (8)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #1E88E5; color: white;">عرض المذكرة</button>
+                </div>
+
+                <div class="book-card" onclick="openViewer('https://drive.google.com/file/d/1_nH498vJ4hZ9zDqaY0mP5Vkpid9t5agY/preview', 'مذكرة أحياء (9)')">
+                    <div style="font-size: 0.8rem; background: #00897B; color: white; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px;">مذكرة PDF</div>
+                    <i class="fas fa-file-pdf book-icon" style="color: #00897B;"></i>
+                    <h3 style="margin-bottom: 10px;">مذكرة أحياء (9)</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem; flex-grow: 1;">مجموعة مذكرات وملفات شاملة للفصل الدراسي الثاني.</p>
+                    <button class="open-btn" style="background: #00897B; color: white;">عرض المذكرة</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -184,6 +287,11 @@
 
         // دالة فتح العارض الذكي
         function openViewer(url, title) {
+            if (url === '#') {
+                alert('سيتم إضافة هذا المحتوى قريباً!');
+                return;
+            }
+
             const viewer = document.getElementById('site-viewer');
             const iframe = document.getElementById('main-iframe');
             const loader = document.getElementById('viewerLoader');

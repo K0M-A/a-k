@@ -7,7 +7,7 @@
         <div class="login-card">
             <h2 style="color:var(--neon-blue); margin-bottom:20px;">مرحباً بك في المنصة</h2>
             <div id="roleSelection">
-                <button class="role-btn" onclick="selectRole('teacher')">👨‍🏫 أنا المستر</button>
+                <button class="role-btn" onclick="selectRole('teacher')">👨‍🏫 أنا الدكتور</button>
                 <button class="role-btn" onclick="selectRole('student')">👨‍🎓 أنا طالب</button>
             </div>
             <div id="passwordSection" style="display:none;">
@@ -38,7 +38,7 @@
         document.getElementById('roleSelection').style.display = 'none';
         document.getElementById('passwordSection').style.display = 'block';
         document.getElementById('passwordInput').style.display = 'block';
-        document.getElementById('roleTitle').innerText = role === 'teacher' ? 'تسجيل دخول المستر' : 'تسجيل دخول الطالب';
+        document.getElementById('roleTitle').innerText = role === 'teacher' ? 'تسجيل دخول الدكتور' : 'تسجيل دخول الطالب';
         document.getElementById('passwordInput').focus();
     };
 
@@ -53,7 +53,7 @@
         if (selectedRole === 'teacher' && pass === '400') {
             loginOverlay.style.display = 'none';
             document.getElementById('recordWidget').style.display = 'block'; // إظهار زر التسجيل للمستر
-            alert('مرحباً يا مستر! يمكنك الآن تسجيل الحصة.');
+            alert('مرحباً يا دكتور! يمكنك الآن تسجيل الحصة.');
         } else if (selectedRole === 'student' && pass === '300') {
             loginOverlay.style.display = 'none';
             // الطالب لا يرى زر التسجيل
@@ -147,7 +147,7 @@ if (typeof firebase !== 'undefined') {
             // إنشاء تنبيه جذاب للطلاب
             const msg = document.createElement('div');
             msg.style = "position:fixed; top:80px; left:50%; transform:translateX(-50%); background:var(--neon-red); color:white; padding:15px 30px; border-radius:10px; z-index:2000; box-shadow:0 5px 20px rgba(0,0,0,0.5); font-weight:bold; animation:bounceIn 0.5s;";
-            msg.innerHTML = `<i class="fas fa-bell"></i> تنبيه من المستر: ${data.text}`;
+            msg.innerHTML = `<i class="fas fa-bell"></i> تنبيه من الدكتور: ${data.text}`;
             document.body.appendChild(msg);
             
             // يختفي بعد 10 ثواني
@@ -249,7 +249,7 @@ document.getElementById('sendBtn').onclick = () => {
     if (msgInput.value.trim() === "") return;
     const msg = document.createElement('div');
     msg.className = 'message admin';
-    msg.innerHTML = `<strong>أ. شريف:</strong> <br> ${msgInput.value}`;
+    msg.innerHTML = `<strong>د. شريف:</strong> <br> ${msgInput.value}`;
     chatBox.appendChild(msg);
     msgInput.value = "";
     chatBox.scrollTop = chatBox.scrollHeight;
